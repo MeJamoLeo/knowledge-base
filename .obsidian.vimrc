@@ -1,0 +1,2 @@
+" Escape 
+imap jj <Esc>
