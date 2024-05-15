@@ -1,4 +1,4 @@
-#B問題 #ABC #ABC353
+#B問題 #ABC #ABC353A #解説AC
 
 https://atcoder.jp/contests/abc353/tasks/abc353_b
 ### 問題文
