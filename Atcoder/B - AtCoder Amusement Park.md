@@ -27,13 +27,6 @@ AtCoder 遊園地には 𝐾K 人乗りのアトラクションがあります
 ```cpp
 #include <bits/stdc++.h>
 using namespace std;
-<<<<<<< HEAD
- 
-int main() {
-	
-}
-```
-=======
 int main() {
     int n,k;
     cin >> n >> k;
@@ -55,4 +48,3 @@ int main() {
     return 0;
 }  
 ```
->>>>>>> b5a937c64c5d7b71f0b253a3a1d650a5368e1992
