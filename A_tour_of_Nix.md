@@ -593,7 +593,7 @@ in
 | . . . | . . .|. . .|. . .|
 |[Equality](https://nix.dev/manual/nix/2.22/language/operators#equality)|_expr_ `==` _expr_|none|11|
 | . . . | . . .|. . .|. . .|
-> https://nix.dev/manual/nix/2.22/language/operators#has-attribute
+> https://nix.dev/manual/nix/2.22/language/operators
 
 
 </br>
@@ -603,6 +603,31 @@ in
 </br>
 
 # Attribute sets: examples 2 (16/35)
+> [!todo]
+> Make `ex0` and `ex1` to evaluate to true
+> ```nix
+> let
+>   list = [ { name = "foo"; value = 123; }
+>            { name = "bar"; value = 456; } ];
+>   string = ''{"x": [1, 2, 3], "y": null}'';
+> in 
+> {
+>   ex0 = builtins.listToAttrs list == { XXX };
+>   ex1 = builtins.fromJSON string == { XXX };
+> }
+> ```
+
+```nix
+let
+  list = [ { name = "foo"; value = 123; }
+           { name = "bar"; value = 456; } ];
+  string = ''{"x": [1, 2, 3], "y": null}'';
+in
+{
+  ex0 = builtins.listToAttrs list == {foo = 123; bar = 456;};
+  ex1 = builtins.fromJSON string == {x = [1 2 3]; y = null;};
+}
+```
 
 </br>
 </br>
@@ -611,6 +636,29 @@ in
 </br>
 
 # Attribute sets: examples 3 (17/35)
+> [!todo]
+> make `exBounus` true
+> ```nix
+> let
+>   attrSetBonus = {f = {add = (x: y: x + y);
+>                        mul = (x: y: x * y);};
+>                   n = {one = 1; two = 2;};};
+> in
+> rec {
+>   # Bonus: use only the attrSetBonus to solve this one
+>   exBonus = 5 == XX ( XX XX XX ) XX;
+> }
+> ```
+```nix
+let
+  attrSetBonus = {f = {add = (x: y: x + y);
+                       mul = (x: y: x * y);};
+                  n = {one = 1; two = 2;};};
+in
+rec {
+  exBonus = 5 == attrSetBonus.f.add ( attrSetBonus.f.mul attrSetBonus.n.two attrSetBonus.n.two) attrSetBonus.n.one;
+}
+```
 
 </br>
 </br>
@@ -619,6 +667,48 @@ in
 </br>
 
 # Attribute sets: merging (18/35)
+> [!todo]
+> ```nix
+> let
+>   x = { a="bananas"; b= "pineapples"; };
+>   y = { a="kakis"; c ="grapes";};
+>   z = { a="raspberrys"; c= "oranges"; };
+> 
+>   func = {a, b, c ? "another secret ingredient"}: "A drink of: " + 
+>     a + ", " + b + " and " + c;
+> in
+> rec {
+>   ex00=func ( x );  
+>   # hit 'run', you need the output to solve this!
+>   # ex01=func (y // X );  
+>   # ex02=func (x // { X="lychees";});
+>   # ex03=func (X // x // z);
+> }
+> ```
+> > [!hint]
+> > Update operator `//`
+> > 優先度は以下のリンクから
+> > https://nix.dev/manual/nix/2.22/language/operators
+```nix
+let
+  x = { a="bananas"; b= "pineapples"; };
+  y = { a="kakis"; c ="grapes";};
+  z = { a="raspberrys"; c= "oranges"; };
+
+  func = {a, b, c ? "another secret ingredient"}: "A drink of: " + 
+    a + ", " + b + " and " + c;
+in
+rec {
+  ex00=func ( x );  
+  # hit 'run', you need the output to solve this!
+  ex01=func (y // x );  
+  ex02=func (x // { c="lychees";});
+  ex03=func ({} // x // z);
+}
+```
+```output
+{ ex00 = "A drink of: bananas, pineapples and another secret ingredient"; ex01 = "A drink of: bananas, pineapples and grapes"; ex02 = "A drink of: bananas, pineapples and lychees"; ex03 = "A drink of: raspberrys, pineapples and oranges"; }
+```
 
 </br>
 </br>
@@ -627,7 +717,69 @@ in
 </br>
 
 # Attribute sets and boolean (19/35)
+> [!todo]
+> Remove the `#` to uncomment the exercises as you proceed.
+> ```nix
+> let
+>   attrSet = {x = "a"; y = "b"; b = {t = true; f = false;};};
+>   attrSet.c = 1;
+>   attrSet.d = null;
+>   attrSet.e.f = "g";
+> in
+> rec {
+>   # boolean
+>   ex0 = attrSet.b.t;
+>   # equal
+>   ex01 =  "a" == attrSet.XX; 
+>   # unequal 
+>   ex02 = !("b" != attrSet.XX );
+>   # and/or/neg
+>   ex03 = ex01 && !ex02 || ! attrSet.XX;
+>   # implication
+>  ex04 = true -> attrSet.XX;
+>  ex05 = attrSet.XX ? e;
+> }
+> ``` 
 
+|Name|Syntax|Associativity|Precedence|
+|---|---|---|---|
+|[Attribute selection](https://nix.dev/manual/nix/2.22/language/operators#attribute-selection)|_attrset_ `.` _attrpath_ [ `or` _expr_ ]|none|1|
+|Function application|_func_ _expr_|left|2|
+|...|...|...|...|
+|[Has attribute](https://nix.dev/manual/nix/2.22/language/operators#has-attribute)|_attrset_ `?` _attrpath_|none|4|
+|...|...|...|...|
+|Logical negation (`NOT`)|`!` _bool_|none|8|
+|[Update](https://nix.dev/manual/nix/2.22/language/operators#update)|_attrset_ `//` _attrset_|right|9|
+|...|...|...|...|
+|[Equality](https://nix.dev/manual/nix/2.22/language/operators#equality)|_expr_ `==` _expr_|none|11|
+|Inequality|_expr_ `!=` _expr_|none|11|
+|Logical conjunction (`AND`)|_bool_ `&&` _bool_|left|12|
+|Logical disjunction (`OR`)|_bool_ `\|\|` _bool_|left|13|
+|...|...|...|...|
+|[Logical implication](https://nix.dev/manual/nix/2.22/language/operators#logical-implication)|_bool_ `->` _bool_|right|14|
+
+
+```nix
+let
+  attrSet = {x = "a"; y = "b"; b = {t = true; f = false;};};
+  attrSet.c = 1;
+  attrSet.d = null;
+  attrSet.e.f = "g";
+in
+rec {
+  # boolean
+  ex0 = attrSet.b.t;
+  # equal
+  ex01 =  "a" == attrSet.x; 
+  # unequal 
+  ex02 = !("b" != attrSet.y);
+  # and/or/neg
+  ex03 = ex01 && !ex02 || ! attrSet.XX;
+  # implication
+ ex04 = true -> attrSet.XX;
+ ex05 = attrSet.XX ? e;
+}
+``` 
 </br>
 </br>
 </br>
@@ -635,6 +787,67 @@ in
 </br>
 
 # Lists (20/35)
+
+> [!todo]
+> replace all X, everything should evaluate to true
+> ```nix
+> with import <nixpkgs> { };
+>  > with stdenv.lib;
+> let
+>   list = [2 "4" true false {a = 27;} false 3];
+>   f = x: isString x;
+>   s = "foobar";
+> in
+> {
+>   ex00 = isList X;
+> #  ex01 = elemAt list 2 == X;
+> #  ex02 = length list == X;
+> #  ex03 = last list == X;
+> #  ex04 = filter f list == [ XX ];
+> #  ex05 = head list == X;
+> #  ex06 = tail list == [ XXX ];
+> #  ex07 = remove true list == [ XXX ];
+> #  ex08 = toList s == [ XXX ];
+> #  ex09 = take 3 list == [ XXX ];
+> #  ex10 = drop 4 list == [ XXX ];
+> #  ex11 = unique list == [ XXX ];
+> #  ex12 = list ++ ["x" "y"] == [ XXX ];
+> }
+> ```
+
+```nix
+with import <nixpkgs> { };
+with stdenv.lib;
+let
+  list = [2 "4" true false {a = 27;} false 3];
+  f = x: isString x;
+  s = "foobar";
+in
+{
+  ex00 = isList list;
+  ex01 = elemAt list 2 == true;
+  ex02 = length list == 7;
+  ex03 = last list == 3;
+  ex04 = filter f list == [ "4" ];
+  ex05 = head list == 2;
+  ex06 = tail list == [ "4" true false {a = 27;} false 3 ];
+  ex07 = remove true list == [ 2 "4" false {a = 27;} false 3 ];
+  ex08 = toList s == [ "foobar" ];
+  ex09 = take 3 list == [ 2 "4" true ];
+  ex10 = drop 4 list == [ {a = 27;} false 3 ];
+  ex11 = unique list == [ 2 "4" true false {a = 27;} 3 ];
+  ex12 = list ++ ["x" "y"] == [ 2 "4" true false {a = 27;} false 3 "x" "y" ];
+}
+```
+
+> [!note]
+> ## `stdenv.lib`
+> - `tail list`
+> 	- Return the list without its first item; abort evaluation if the argument isn’t a list or is an empty list.
+> - `take i list`
+> 	- 特定の配列を返す。この配列はもとの配列の先頭からi個の要素を持つ？？？
+> 	- 公式で確認する必要がある。
+
 
 </br>
 </br>
