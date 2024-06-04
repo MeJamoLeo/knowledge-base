@@ -24,25 +24,29 @@
 </br>
 
 # Hello World (3/35)
-```nix
-# output "Hello World"
-let 
-  h = "Hello";
-  w = "World";
-in
-{
-  helloWorld = h + X + X;
-}
-```
-```nix
-let 
-  h = "Hello";
-  w = "World";
-in
-{
-  helloWorld = h + w;
-}
-```
+> [!todo]
+> ```nix
+> # output "Hello World"
+> let 
+>   h = "Hello";
+>   w = "World";
+> in
+> {
+>   helloWorld = h + X + X;
+> }
+> ```
+ 
+> [!done]
+> ```nix
+> let 
+>   h = "Hello";
+>   w = "World";
+> in
+> {
+>   helloWorld = h + w;
+> }
+> ```
+
 > [!info]
 > ## Let
 > ```nix
@@ -70,29 +74,33 @@ in
 > attributeは変数みたいなもの。
 > nixはattribute setの塊を持つ。
 > keyとvalueを持つ。
-```nix
-# Complete ex0, ex1 and ex2 to each print 'Hello World'.
-let 
-  h = "Hello";
-in
-{
-  ex0 = "${h} X";
-  ex1 = "${h + X + X}";
-  ex2 = ''${h + X + X}'';
-}
-```
-```nix
-let 
-  h = "Hello";
-  s = " ";
-  w = "World";
-in
-{
-  ex0 = "${h} World";
-  ex1 = "${h + s + w}";
-  ex2 = ''${h + s + w}'';
-}
-```
+
+> [!todo]
+> ```nix
+> # Complete ex0, ex1 and ex2 to each print 'Hello World'.
+> let 
+>   h = "Hello";
+> in
+> {
+>   ex0 = "${h} X";
+>   ex1 = "${h + X + X}";
+>   ex2 = ''${h + X + X}'';
+> }
+> ```
+
+> [!done]
+> ```nix
+> let 
+>   h = "Hello";
+>   s = " ";
+>   w = "World";
+> in
+> {
+>   ex0 = "${h} World";
+>   ex1 = "${h + s + w}";
+>   ex2 = ''${h + s + w}'';
+> }
+> ```
 
 </br>
 </br>
@@ -110,40 +118,44 @@ in
 > '' 
 > ```
 > マルチラインのなかにも
-```nix
-# Format ex0 as wanted by the solution checker!
- 
-let 
-  user = "mrNix";
-  pass = "99supersecret";
-  vip = true;
-  vipString = if vip == true then ''vip: XXX '' else XXX
-in
-{
-  ex0 = ''
-  ${user}
-    password: XXX
-    ${vipString}
-  '';
-}
-```
-```nix
-# Format ex0 as wanted by the solution checker!
- 
-let 
-  user = "mrNix";
-  pass = "99supersecret";
-  vip = true;
-  vipString = if vip == true then ''vip: "true" '' else "false";
-in
-{
-  ex0 = ''
-  ${user}
-    password: ${pass}
-    ${vipString}
-  '';
-}
-```
+
+> [!todo]
+> ```nix
+> # Format ex0 as wanted by the solution checker!
+>  
+> let 
+>   user = "mrNix";
+>   pass = "99supersecret";
+>   vip = true;
+>   vipString = if vip == true then ''vip: XXX '' else XXX
+> in
+> {
+>   ex0 = ''
+>   ${user}
+>     password: XXX
+>     ${vipString}
+>   '';
+> }
+> ```
+
+> [!done]
+> ```nix
+> # Format ex0 as wanted by the solution checker!
+>  
+> let 
+>   user = "mrNix";
+>   pass = "99supersecret";
+>   vip = true;
+>   vipString = if vip == true then ''vip: "true" '' else "false";
+> in
+> {
+>   ex0 = ''
+>   ${user}
+>     password: ${pass}
+>     ${vipString}
+>   '';
+> }
+> ```
 
 </br>
 </br>
@@ -242,16 +254,18 @@ in
 > ```
 > > [!hint]
 > >  if () then X else Y
-```nix
-let
-  min = a: b: if (a < b) then a else b;
-  max = a: b: if (a > b) then a else b;
-in
-{
-  ex0 = min 5 3;
-  ex1 = max 9 4;
-}
-```
+
+> [!done]
+> ```nix
+> let
+>   min = a: b: if (a < b) then a else b;
+>   max = a: b: if (a > b) then a else b;
+> in
+> {
+>   ex0 = min 5 3;
+>   ex1 = max 9 4;
+> }
+> ```
 
 
 </br>
@@ -282,19 +296,21 @@ in
 > > 		- `?`でdefault valueを設定する。
 > > 		- その引数はオプションとなり、値がない場合はデフォルトの値が入る
 > > - rec
-```nix
-let
-  f = "f";
-  o = "o";
-  b = "b";
-  func = {a ? f, b ? "a" , c ? "" }: a+b+c; # オプションを設定した
-in
-rec {
-  foo = func {b="o"; c=o;};
-  bar = func {a=b; c="r";};
-  foobar = func {a=foo;b=bar;};
-}
-```
+
+> [!done]
+> ```nix
+> let
+>   f = "f";
+>   o = "o";
+>   b = "b";
+>   func = {a ? f, b ? "a" , c ? "" }: a+b+c; # オプションを設定した
+> in
+> rec {
+>   foo = func {b="o"; c=o;};
+>   bar = func {a=b; c="r";};
+>   foobar = func {a=foo;b=bar;};
+> }
+> ```
 
 
 </br>
@@ -323,22 +339,25 @@ rec {
 > > [!hint]
 > > ## @-pattern
 > > attribute setから特定のattributeを取り出す場合は明示的にするひつようがある
-```nix
-let
-  arguments = {a="f"; b="o"; c="o"; d="bar";}; # only modify this line
-  func = {a, b, c, ...}: a+b+c; 
-  func2 = args@{a, b, c, ...}: a+b+c+args.d;
-in
-{
-  # the argument d is not used 
-  foo = func arguments;
-  # now the argument d is used
-  foobar = func2 arguments;
-}
 
-```
-> [!note]
-> Nixでは、関数に属性セットを渡す際、その属性セットに定義されていない追加の属性を含めることができます。このような追加の属性にアクセスするために@-パターンを使用します。
+
+> [!done]
+> ```nix
+> let
+>   arguments = {a="f"; b="o"; c="o"; d="bar";}; # only modify this line
+>   func = {a, b, c, ...}: a+b+c; 
+>   func2 = args@{a, b, c, ...}: a+b+c+args.d;
+> in
+> {
+>   # the argument d is not used 
+>   foo = func arguments;
+>   # now the argument d is used
+>   foobar = func2 arguments;
+> }
+> 
+> ```
+> > [!note]
+> > Nixでは、関数に属性セットを渡す際、その属性セットに定義されていない追加の属性を含めることができます。このような追加の属性にアクセスするために@-パターンを使用します。
 
 </br>
 </br>
@@ -360,19 +379,20 @@ in
 > }
 > ```
 
-```nix
-let
-  func = {a, b, ...}@bargs: if a == "foo" then
-    b + bargs.c else b + bargs.x + bargs.y;
-in
-{
-  # complete next line so it evaluates to "foobar"
- foobar = func {a="bar"; b="foo"; x="bar"; y="";};
-}
-```
-> [!note]
-> ### `bargs@{a, b, ...}`と`{a, b, ...}@bargs`の等価性
-> `bargs@{a, b, ...}`と`{a, b, ...}@bargs`は、どちらも同じ意味を持ち、元の属性セット全体と特定の属性にアクセスするための方法です。これらの構文は完全に同じ効果を持ちます。
+> [!done]
+> ```nix
+> let
+>   func = {a, b, ...}@bargs: if a == "foo" then
+>     b + bargs.c else b + bargs.x + bargs.y;
+> in
+> {
+>   # complete next line so it evaluates to "foobar"
+>  foobar = func {a="bar"; b="foo"; x="bar"; y="";};
+> }
+> ```
+> > [!note]
+> > ### `bargs@{a, b, ...}`と`{a, b, ...}@bargs`の等価性
+> > `bargs@{a, b, ...}`と`{a, b, ...}@bargs`は、どちらも同じ意味を持ち、元の属性セット全体と特定の属性にアクセスするための方法です。これらの構文は完全に同じ効果を持ちます。
 
 </br>
 </br>
@@ -427,24 +447,25 @@ in
 >   fu2 = (x: y: (2 * x) + y);
 > ```
 
-```nix
-let
-  b = 1;
-  fu0 = (x: x);
-  fu1 = (x: y: x + y) 4;
-  fu2 = (x: y: (2 * x) + y);
-in
-rec {
-  ex00 = fu0 4;     # must return 4
-  ex01 = (fu1) 1;   # must return 5
-  ex02 = (fu2 2) 3; # must return 7
-  ex03 = (fu2 2);   # must return <LAMBDA>s
-
-# ここがpartial application
-  ex04 = ex03 3;    # must return 7
-  ex05 = (n: x: (fu2 x n)) 3 2; # must return 7
-}
-```
+> [!done]
+> ```nix
+> let
+>   b = 1;
+>   fu0 = (x: x);
+>   fu1 = (x: y: x + y) 4;
+>   fu2 = (x: y: (2 * x) + y);
+> in
+> rec {
+>   ex00 = fu0 4;     # must return 4
+>   ex01 = (fu1) 1;   # must return 5
+>   ex02 = (fu2 2) 3; # must return 7
+>   ex03 = (fu2 2);   # must return <LAMBDA>s
+> 
+> # ここがpartial application
+>   ex04 = ex03 3;    # must return 7
+>   ex05 = (n: x: (fu2 x n)) 3 2; # must return 7
+> }
+> ```
 
 </br>
 </br>
@@ -467,19 +488,20 @@ rec {
 > 
 > ```
 
-```nix
-let
-  arguments = {a="Happy"; b="Awesome";};
-
-  func = {a, b}: {d, b, c}: a+b+c+d;
-in
-{
-  A = func arguments {d="Called"; b="Functions"; c="Are";};
-}
-```
-> [!note]
-> 複数のsetを引数に取ることができる。
-> この例では２つめのsetが1つめのsetの中の変数を上書きする。
+> [!done]
+> ```nix
+> let
+>   arguments = {a="Happy"; b="Awesome";};
+> 
+>   func = {a, b}: {d, b, c}: a+b+c+d;
+> in
+> {
+>   A = func arguments {d="Called"; b="Functions"; c="Are";};
+> }
+> ```
+> > [!note]
+> > 複数のsetを引数に取ることができる。
+> > この例では２つめのsetが1つめのsetの中の変数を上書きする。
 
 </br>
 </br>
@@ -560,28 +582,29 @@ in
 > >      }
 > > 	```
 
-```nix
-with import <nixpkgs> { };
-with stdenv.lib;
-let
-  attr = {a="a"; b = 1; c = true;};
-  s = "b";
-in
-{
-  #replace all X, everything should evaluate to true
-  ex0 = isAttrs attr;
-  ex1 = attr.a == "a";
-  ex2 = attr.${s} == 1;
-  ex3 = attrVals ["c" "b"] attr == [ true 1 ];
-  ex4 = attrValues attr == [ "a" 1 true ];
-  ex5 = builtins.intersectAttrs attr {a="b"; d=234; c="";} 
-    == { a = "b"; c = "";};
-  ex6 = removeAttrs attr ["b" "c"] == { a="a";};
-  ex7 = ! attr ? a == false;
-}
-``` 
-> [!info] ex7, Operatorの優先度
-> Has attribute`?` > Logical negation`!` > Equality`==`
+> [!done]
+> ```nix
+> with import <nixpkgs> { };
+> with stdenv.lib;
+> let
+>   attr = {a="a"; b = 1; c = true;};
+>   s = "b";
+> in
+> {
+>   #replace all X, everything should evaluate to true
+>   ex0 = isAttrs attr;
+>   ex1 = attr.a == "a";
+>   ex2 = attr.${s} == 1;
+>   ex3 = attrVals ["c" "b"] attr == [ true 1 ];
+>   ex4 = attrValues attr == [ "a" 1 true ];
+>   ex5 = builtins.intersectAttrs attr {a="b"; d=234; c="";} 
+>     == { a = "b"; c = "";};
+>   ex6 = removeAttrs attr ["b" "c"] == { a="a";};
+>   ex7 = ! attr ? a == false;
+> }
+> ``` 
+>> [!info] ex7, Operatorの優先度
+>> Has attribute`?` > Logical negation`!` > Equality`==`
 
 |Name|Syntax|Associativity|Precedence|
 |---|---|---|---|
@@ -617,17 +640,18 @@ in
 > }
 > ```
 
-```nix
-let
-  list = [ { name = "foo"; value = 123; }
-           { name = "bar"; value = 456; } ];
-  string = ''{"x": [1, 2, 3], "y": null}'';
-in
-{
-  ex0 = builtins.listToAttrs list == {foo = 123; bar = 456;};
-  ex1 = builtins.fromJSON string == {x = [1 2 3]; y = null;};
-}
-```
+> [!done]
+> ```nix
+> let
+>   list = [ { name = "foo"; value = 123; }
+>            { name = "bar"; value = 456; } ];
+>   string = ''{"x": [1, 2, 3], "y": null}'';
+> in
+> {
+>   ex0 = builtins.listToAttrs list == {foo = 123; bar = 456;};
+>   ex1 = builtins.fromJSON string == {x = [1 2 3]; y = null;};
+> }
+> ```
 
 </br>
 </br>
@@ -649,16 +673,18 @@ in
 >   exBonus = 5 == XX ( XX XX XX ) XX;
 > }
 > ```
-```nix
-let
-  attrSetBonus = {f = {add = (x: y: x + y);
-                       mul = (x: y: x * y);};
-                  n = {one = 1; two = 2;};};
-in
-rec {
-  exBonus = 5 == attrSetBonus.f.add ( attrSetBonus.f.mul attrSetBonus.n.two attrSetBonus.n.two) attrSetBonus.n.one;
-}
-```
+
+> [!done]
+> ```nix
+> let
+>   attrSetBonus = {f = {add = (x: y: x + y);
+>                        mul = (x: y: x * y);};
+>                   n = {one = 1; two = 2;};};
+> in
+> rec {
+>   exBonus = 5 == attrSetBonus.f.add ( attrSetBonus.f.mul attrSetBonus.n.two attrSetBonus.n.two) attrSetBonus.n.one;
+> }
+> ```
 
 </br>
 </br>
@@ -689,26 +715,28 @@ rec {
 > > Update operator `//`
 > > 優先度は以下のリンクから
 > > https://nix.dev/manual/nix/2.22/language/operators
-```nix
-let
-  x = { a="bananas"; b= "pineapples"; };
-  y = { a="kakis"; c ="grapes";};
-  z = { a="raspberrys"; c= "oranges"; };
 
-  func = {a, b, c ? "another secret ingredient"}: "A drink of: " + 
-    a + ", " + b + " and " + c;
-in
-rec {
-  ex00=func ( x );  
-  # hit 'run', you need the output to solve this!
-  ex01=func (y // x );  
-  ex02=func (x // { c="lychees";});
-  ex03=func ({} // x // z);
-}
-```
-```output
-{ ex00 = "A drink of: bananas, pineapples and another secret ingredient"; ex01 = "A drink of: bananas, pineapples and grapes"; ex02 = "A drink of: bananas, pineapples and lychees"; ex03 = "A drink of: raspberrys, pineapples and oranges"; }
-```
+> [!done]
+> ```nix
+> let
+>   x = { a="bananas"; b= "pineapples"; };
+>   y = { a="kakis"; c ="grapes";};
+>   z = { a="raspberrys"; c= "oranges"; };
+> 
+>   func = {a, b, c ? "another secret ingredient"}: "A drink of: " + 
+>     a + ", " + b + " and " + c;
+> in
+> rec {
+>   ex00=func ( x );  
+>   # hit 'run', you need the output to solve this!
+>   ex01=func (y // x );  
+>   ex02=func (x // { c="lychees";});
+>   ex03=func ({} // x // z);
+> }
+> ```
+> ```output
+> { ex00 = "A drink of: bananas, pineapples and another secret ingredient"; ex01 = "A drink of: bananas, pineapples and grapes"; ex02 = "A drink of: bananas, pineapples and lychees"; ex03 = "A drink of: raspberrys, pineapples and oranges"; }
+> ```
 
 </br>
 </br>
@@ -759,27 +787,29 @@ rec {
 |[Logical implication](https://nix.dev/manual/nix/2.22/language/operators#logical-implication)|_bool_ `->` _bool_|right|14|
 
 
-```nix
-let
-  attrSet = {x = "a"; y = "b"; b = {t = true; f = false;};};
-  attrSet.c = 1;
-  attrSet.d = null;
-  attrSet.e.f = "g";
-in
-rec {
-  # boolean
-  ex0 = attrSet.b.t;
-  # equal
-  ex01 =  "a" == attrSet.x; 
-  # unequal 
-  ex02 = !("b" != attrSet.y);
-  # and/or/neg
-  ex03 = ex01 && !ex02 || ! attrSet.XX;
-  # implication
- ex04 = true -> attrSet.XX;
- ex05 = attrSet.XX ? e;
-}
-``` 
+> [!done]
+> ```nix
+> let
+>   attrSet = {x = "a"; y = "b"; b = {t = true; f = false;};};
+>   attrSet.c = 1;
+>   attrSet.d = null;
+>   attrSet.e.f = "g";
+> in
+> rec {
+>   # boolean
+>   ex0 = attrSet.b.t;
+>   # equal
+>   ex01 =  "a" == attrSet.x; 
+>   # unequal 
+>   ex02 = !("b" != attrSet.y);
+>   # and/or/neg
+>   ex03 = ex01 && !ex02 || ! attrSet.XX;
+>   # implication
+>  ex04 = true -> attrSet.XX;
+>  ex05 = attrSet.XX ? e;
+> }
+> ``` 
+
 </br>
 </br>
 </br>
@@ -815,30 +845,31 @@ rec {
 > }
 > ```
 
-```nix
-with import <nixpkgs> { };
-with stdenv.lib;
-let
-  list = [2 "4" true false {a = 27;} false 3];
-  f = x: isString x;
-  s = "foobar";
-in
-{
-  ex00 = isList list;
-  ex01 = elemAt list 2 == true;
-  ex02 = length list == 7;
-  ex03 = last list == 3;
-  ex04 = filter f list == [ "4" ];
-  ex05 = head list == 2;
-  ex06 = tail list == [ "4" true false {a = 27;} false 3 ];
-  ex07 = remove true list == [ 2 "4" false {a = 27;} false 3 ];
-  ex08 = toList s == [ "foobar" ];
-  ex09 = take 3 list == [ 2 "4" true ];
-  ex10 = drop 4 list == [ {a = 27;} false 3 ];
-  ex11 = unique list == [ 2 "4" true false {a = 27;} 3 ];
-  ex12 = list ++ ["x" "y"] == [ 2 "4" true false {a = 27;} false 3 "x" "y" ];
-}
-```
+> [!done]
+> ```nix
+> with import <nixpkgs> { };
+> with stdenv.lib;
+> let
+>   list = [2 "4" true false {a = 27;} false 3];
+>   f = x: isString x;
+>   s = "foobar";
+> in
+> {
+>   ex00 = isList list;
+>   ex01 = elemAt list 2 == true;
+>   ex02 = length list == 7;
+>   ex03 = last list == 3;
+>   ex04 = filter f list == [ "4" ];
+>   ex05 = head list == 2;
+>   ex06 = tail list == [ "4" true false {a = 27;} false 3 ];
+>   ex07 = remove true list == [ 2 "4" false {a = 27;} false 3 ];
+>   ex08 = toList s == [ "foobar" ];
+>   ex09 = take 3 list == [ 2 "4" true ];
+>   ex10 = drop 4 list == [ {a = 27;} false 3 ];
+>   ex11 = unique list == [ 2 "4" true false {a = 27;} 3 ];
+>   ex12 = list ++ ["x" "y"] == [ 2 "4" true false {a = 27;} false 3 "x" "y" ];
+> }
+> ```
 
 > [!note]
 > ## `stdenv.lib`
@@ -857,13 +888,118 @@ in
 
 # Lists & attribute sets (21/35)
 
+>[!todo]
+> ```nix
+> let
+>   attrSet = {x = "a"; y = "b"; b = {t = true; f = false;};};
+>   attrSet.c = 1;
+>   attrSet.d = 2;
+>   attrSet.e.f = "g";
+> 
+>   list1 = [attrSet.c attrSet.d];
+>   list2 = [attrSet.x attrSet.y];
+> 
+> in
+> {
+>   #List concatenation.
+>   ex0 = ["a" "b" 1 2] == XX ++ XX;
+> }
+> ```
+
+> [!done]
+> ```nix
+> let
+>   attrSet = {x = "a"; y = "b"; b = {t = true; f = false;};};
+>   attrSet.c = 1;
+>   attrSet.d = 2;
+>   attrSet.e.f = "g";
+> 
+>   list1 = [attrSet.c attrSet.d];
+>   list2 = [attrSet.x attrSet.y];
+> 
+> in
+> {
+>   #List concatenation.
+>   ex0 = ["a" "b" 1 2] == list2 ++ list1;
+> }
+> ```
+> > [!note]
+> > 配列の要素をattributeを使って定義している。
+
 </br>
 </br>
 </br>
 </br>
 </br>
 
-# inherit / import / with! (22/35)
+# inherit / import / with (22/35)
+> [!info]
+> - `with`
+>   - attributeの中身を直接参照できるようになる
+>   ```nix
+>    let 
+>      as = { x = "foo"; y = "bar"; };
+>    in 
+>      with as; x + y
+>   ```
+>   - in other words, `as.x`, `as.y`のような書き方が省略できる。
+> 	  - バグのリスクもあるので取り扱いのスコープは小さく
+> 	  - pkgsの文字とよくみる。`pkgs.XXX`を省略する意図
+> - `import`
+> 	- **ChatGPTに聞いた**
+>      - ### 具体的な例と説明
+>      以下のコード例を説明します：
+>         ```nix
+>         # sample.nix
+>         rec {   x = 123;   y = import ./foo.nix; }
+>         ```
+>         ```nix
+>         # foo.nix
+>         {   a = "hello";   b = 456; }
+>         ```
+>         上記のコードが実行されると、次のような属性セットが生成されます：
+>         ```nix
+>         {   x = 123;   y = {     a = "hello";     b = 456;   }; }
+>         ```
+>         これにより、`x`は`123`に、`y`は`{ a = "hello"; b = 456; }`という属性セットに設定されます。 
+> - `inherit`
+>     - Nixにおける`inherit`キーワードは、現在のスコープ内で定義されている属性を、そのまま属性セットに取り込むために使用されます。これにより、既存の変数や定義済みの属性を再利用することができます。
+>       > [!question]
+>       > よくわかってねぇ
+>       > よく見るが、使う本質がわからんので、未来の自分に実際のコードで理解できることを祈る。
+
+> [!todo]
+> ```nix
+> let 
+>   myImport = import <nixpkgs> {};
+>   x = 123; 
+>   as = { a = "foo"; b = "bar"; };
+>   
+> in with as; { 
+>   inherit x; #example
+>   #fix line below: we want a and b in this scope
+>   inherit X; 
+>   #also fix this line
+>   z = XXX.lib.isBool true;
+> }
+> ```
+
+> [!done]
+> ```nix
+> let 
+>   myImport = import <nixpkgs> {};
+>   x = 123; 
+>   as = { a = "foo"; b = "bar"; };
+>   
+> in with as; { 
+>   inherit x; #example
+>   # fix line below: we want a and b in this scope
+>   inherit a b; 
+>   # also fix this line
+>   z = myImport.lib.isBool true;
+> }
+> ```
+
 
 </br>
 </br>
