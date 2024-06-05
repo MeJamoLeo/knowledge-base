@@ -1008,6 +1008,62 @@ in
 </br>
 
 # Scoping of attributes in let/with (23/35)
+This question is about scopes. `let` binds `attributes` as well as `with` does.
+Question: Which value is `res` assinged to and why?
+Solution: See the `solution` button's associated source code.
+
+> [!todo]
+> ```nix
+> let
+>   x = 123;
+>   as = { a = "foo"; b = "bar"; x="234"; };
+>  
+> in with as; {
+>  res = x; # what value is res bound to?
+> }
+> ```
+
+> [!done] case 1
+> ```nix
+> let
+>   x = 123;
+>   as = { a = "foo"; b = "bar"; x="234"; };
+>  
+> in with as; {
+>  res = x; # what value is res bound to?
+> }
+> ```
+> ```output
+> {res = "123";}
+> ```
+  
+> [!done] case 2
+> ```nix
+> let
+>   as = { a = "foo"; b = "bar"; x="234"; };
+>   x = 123;
+>  
+> in with as; {
+>  res = x; # what value is res bound to?
+> }
+> ```
+> ```output
+> {res = "123";}
+> ```
+  
+> [!fail] case 3
+> ```nix
+> let
+>   as = { a = "foo"; b = "bar"; x="234"; };
+>   # x = 123;
+>  
+> in with as; {
+>  res = x; # what value is res bound to?
+> }
+> ```
+> ```output
+> {res = "234";}
+> ```
 
 </br>
 </br>
@@ -1017,6 +1073,80 @@ in
 
 # Typing system (24/35)
 
+> [!todo]
+> use these functions: `isBool`, `isInt`, `isString`, `isNull`, `isList`, `isAttrs` and `isFunction`.
+> ```nix
+> with import <nixpkgs> {};
+> with lib;
+> {
+>   ex00 = isAttrs {};
+>   # ex01 = isX "a"; 
+>   # ex02 = isX (-3); 
+>   # ex03 = isX (x: x);
+>   # ex04 = isX (x:x);
+>   # ex05 = isX ("x");
+>   # ex06 = isX null; 
+>   # ex07 = isX (y: y+1);
+>   # ex08 = isX [({z}: z) (x: x)];
+>   # ex09 = isX {a=[];};
+>   # ex10 = isX -10; # oh, what is that?
+> }
+> ```
+> > [!note]
+> > `()` can either be a `function` or indicates `precedence（優先度）`.
+
+> [!done]
+> ```nix
+> with import <nixpkgs> {};
+> with lib;
+> {
+>   ex00 = isAttrs {};
+>   ex01 = isString "a"; 
+>   ex02 = isInt (-3); 
+>   ex03 = isFunction (x: x);
+>   ex04 = isString (x:x); # ??
+>   ex05 = isString ("x"); # ??
+>   ex06 = isNull null; 
+>   ex07 = isFunction (y: y+1);
+>   ex08 = isList [({z}: z) (x: x)];
+>   ex09 = isAttrs {a=[];};
+>   ex10 = isInt (-10);
+> }
+> ```
+
+> [!note]  `:`の意味とは？（わかってない）
+> ```nix
+> with import <nixpkgs> {};
+> with lib; {
+>   a = isFunction (x: x);
+>   b = ! isFunction (x:x);
+>   
+>   c = isString (x:x);
+>   d = ! isString (x: x);
+>   
+>   e = ! isString(aaa);
+>   f = isString("aaa");
+>   
+>   g = isString(x:hogehoge);
+>   h = isString(x:21);
+>   i = isString(x:-21);
+>   
+>   g_s = x:hogehoge;
+>   h_s = x:21;
+>   i_s = x:-21;
+>   
+>   # 以下はエラーが起きる
+>   # g_ss = xhogehoge;
+>   # h_ss = x21;
+>   # i_ss = x-21;
+> }
+> ```
+> ```output
+> { a = true; b = true; c = true; d = true; e = true; f = true; g = true;
+>  g_s = "x:hogehoge"; h = true; h_s = "x:21"; i = true; i_s = "x:-21"; }
+> ```
+
+
 </br>
 </br>
 </br>
@@ -1024,6 +1154,70 @@ in
 </br>
 
 # Assertions (25/35)
+assert (主張する)
+`assert e1; e2`
+- `e1`: an expression that should evaluate to a `boolean` value
+- `e2`: 
+	- if `e1` is true
+		- return `e2`
+	- if `e1` is false
+		- throw error
+
+> [!note]
+> if との使い分けは、プログラムの処理がおわるかどうか。
+> バリデーションやデバッグにむいている。
+
+> [!todo]
+> ```nix
+> with import <nixpkgs> {};
+> let
+>   func = x: y: assert (x==2) || abort "x has to be 2 or it won't work!"; x + y;
+>   n = "-5"; # only modify this line
+> in
+> 
+> assert (lib.isInt n) || abort "Type error since supplied argument is no int!";
+> 
+> rec {
+>   ex00 = func (n+3) 3;
+> }
+> ```
+> > [!error]
+> > error: evaluation aborted with the following error message: `‘Type error since supplied argument is no int!’`
+
+> [!failure]
+> ```nix
+> with import <nixpkgs> {};
+> let
+>   func = x: y: assert (x==2) || abort "x has to be 2 or it won't work!"; x + y;
+>   n = -5; # only modify this line
+> in
+> 
+> assert (lib.isInt n) || abort "Type error since supplied argument is no int!";
+> 
+> rec {
+>   ex00 = func (n+3) 3;
+> }
+> ```
+> > [!error]
+> > error: while evaluating the attribute ‘ex00’ at line:10:3:
+> > while evaluating ‘func’ at line:3:13, called from line:10:10:
+> > evaluation aborted with the following error message: `‘x has to be 2 or it won't work!’`
+
+> [!done]
+> ```nix
+> with import <nixpkgs> {};
+> let
+>   func = x: y: assert (x==2) || abort "x has to be 2 or it won't work!"; x + y;
+>   n = -1; # only modify this line
+> in
+> 
+> assert (lib.isInt n) || abort "Type error since supplied argument is no int!";
+> 
+> rec {
+>   ex00 = func (n+3) 3;
+> }
+> ```
+
 
 </br>
 </br>
