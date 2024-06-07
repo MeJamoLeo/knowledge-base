@@ -1226,6 +1226,67 @@ assert (主張する)
 </br>
 
 # Debugging packaging of nano (26/35)
+> [!todo]
+> ```nix
+> let
+>   # dummyfunctions
+>   fetchurl = x: x;
+>   ncurses = "ncurses";
+>   gettext = "gettext";
+> in
+> rec {
+>   pname = "nano" # here
+>   version = 2.3.6"; # here
+> 
+>   name = "${pname}-${version}";
+> 
+>   src = fetchurl {
+>     url = "mirror://gnu/nano/{name}.tar.gz"; # here
+>     sha256 = "a74bf3f18b12c1c777ae737c0e463152439e381aba8720b4bc67449f36a09534";
+>   };
+> 
+>   buildInputs = [ ncurses gettext ];
+> 
+>   configureFlags = "sysconfdir=/etc";
+> 
+>   meta = {
+>     homepage = http://www.nano-editor.org/;
+>     description  "A small, user-friendly console text editor"; # here
+>   };
+> }
+> ```
+
+> [!done]
+> ```nix
+> let
+>   # dummyfunctions
+>   fetchurl = x: x;
+>   ncurses = "ncurses";
+>   gettext = "gettext";
+> in
+> rec {
+>   pname = "nano";
+>   version = "2.3.6";
+> 
+>   name = "${pname}-${version}";
+> 
+>   src = fetchurl {
+>     url = "mirror://gnu/nano/${name}.tar.gz";
+>     sha256 = "a74bf3f18b12c1c777ae737c0e463152439e381aba8720b4bc67449f36a09534";
+>   };
+> 
+>   buildInputs = [ ncurses gettext ];
+> 
+>   configureFlags = "sysconfdir=/etc";
+> 
+>   meta = {
+>     homepage = http://www.nano-editor.org/;
+>     description = "A small, user-friendly console text editor";
+>   };
+> }
+> ```
+
+
 
 </br>
 </br>
@@ -1235,6 +1296,35 @@ assert (主張する)
 
 # Map (27/35)
 
+> [!todo]
+>  Use the map function to extend every `string` in **bar** with "bar".
+> ```nix
+> let
+>   bar = ["bar" "foo" "bla"];
+>   numbers = [1 2 3 4];
+> in
+> {
+>   #multiplies every number by 2
+>   example = map (n: n * 2) numbers; 
+>   #complete this
+> #  foobar = map ( XXX ) XXX;
+> }
+> ```
+ 
+> [!done]
+> ```nix
+> let
+>   bar = ["bar" "foo" "bla"];
+>   numbers = [1 2 3 4];
+> in
+> {
+>   #multiplies every number by 2
+>   example = map (n: n * 2) numbers; 
+>   #complete this
+>   foobar = map (s: s + "bar") bar;
+> }
+> ```
+
 </br>
 </br>
 </br>
@@ -1243,6 +1333,34 @@ assert (主張する)
 
 # mapAttrs (28/35)
 
+> [!todo]
+> In the exercise, multiply every _value_ by 7.
+> ```nix
+> with import <nixpkgs> { };
+> with stdenv.lib;
+> let
+>   attrSet = { a = -2; b = 3; };
+> in 
+> {
+>   ex0 = lib.mapAttrs XXX
+> }
+> ```
+> > [!hint]
+> >  [`mapAttrs f attrset`](https://nix.dev/manual/nix/2.22/language/builtins.html#builtins-mapAttrs)
+> > 関数ではname と valueのみを使う？
+
+> [!done]
+> ```nix
+> with import <nixpkgs> { };
+> with stdenv.lib;
+> let
+>   attrSet = { a = -2; b = 3; };
+> in 
+> {
+>   ex0 = lib.mapAttrs (name: value: value * 7) attrSet;
+> }
+> ```
+
 </br>
 </br>
 </br>
@@ -1250,6 +1368,84 @@ assert (主張する)
 </br>
 
 # Fold: Introduction (29/35)
+> [!info]
+`fold`（`foldr`）と`foldl`は、リストの要素を逐次的に処理し、1つの結果を生成するための高階関数です。これらの関数は関数型プログラミングにおいて非常に一般的であり、リストの畳み込み（folding）とも呼ばれます。Nixでは、標準ライブラリにこれらの関数が用意されています。以下にそれぞれの詳細と使い方を説明します。
+> 
+> ### fold (aka foldr)  (_fold right_)
+> `fold func init [x_1 x_2 ... x_n] == func x_1 (func x_2 ... (func x_n init))`
+> ↑これが全て 
+> ```nix
+> concat = foldr (a: b: a + b) "z"
+> concat [ "a" "b" "c" ]
+> => "abcz"
+> ### different types
+> strange = foldr (int: str: toString (int + 1) + str) "a"
+> strange [ 1 2 3 4 ]
+> => "2345a"
+> ```
+>
+> ### foldl (_fold left_)
+> `foldl func init [x_1 x_2 ... x_n] == func (... (func (func init x_1) x_2) ... x_n)`.
+> ```nix
+> lconcat = foldl (a: b: a + b) "z"
+> lconcat [ "a" "b" "c" ]
+> => "zabc"
+> ### different types
+> lstrange = foldl (str: int: str + toString (int + 1)) "a"
+> lstrange [ 1 2 3 4 ]
+> => "a2345"
+> ```
+> > [!note]
+> >  - foldr
+> >     - `func x_1 (func x_2 ... (func x_n init))`
+> > - foldl
+> > 	- `func (... (func (func init x_1) x_2) ... x_n)`.
+
+> [!attention]
+> 再帰関数みたいなやつ
+> 考え方はおもろいが、手を動かして使ってみないと腑に落ちない。
+> サンプルは何をしているか読めるが、自分では書けないのが現状。
+
+
+
+> [!todo]
+> - `ex0`: use `fold` to write a function that counts all `strings` with value "a" in a given `list`
+> - `ex1`: use `fold` to multiply each element by 2 and add the [ 8 ] to it
+> ```nix
+> with import <nixpkgs> { };
+> with lib;
+> let
+>   list = ["a" "b" "a" "c" "d" "a"];
+>   intList = [ 1 2 3 ];
+>   countA = XXX
+>   #mulB = XXX
+> in
+> rec {
+>   example = fold (x: y: x + y) "z" ["a" "b" "c"]; #is "abcz"
+>   ex0 = countA list; #should be 3
+>   #ex1 = mulB intList; #should be [ 2 4 6 8 ]
+> }
+> ```
+> > [!hint]
+> > functionの定義は`x: 処理`
+> > 関数のスコープを意識しないと、()が少ない場面でつむ。
+
+> [!failure]
+> ```nix
+> with import <nixpkgs> { };
+> with lib;
+> let
+>   list = ["a" "b" "a" "c" "d" "a"];
+>   intList = [ 1 2 3 ];
+>   countA = XXX
+>   #mulB = XXX
+> in
+> rec {
+>   example = fold (x: y: x + y) "z" ["a" "b" "c"]; #is "abcz"
+>   ex0 = countA list; #should be 3
+>   #ex1 = mulB intList; #should be [ 2 4 6 8 ]
+> }
+> ```
 
 </br>
 </br>
@@ -1259,6 +1455,39 @@ assert (主張する)
 
 # Reimplementation: reverseList (30/35)
 
+> [!todo]
+> ```nix
+> with import <nixpkgs> { };
+> let
+>   listOfNumbers = [2 4 6 9 27];
+>   reverseList = lib.fold XXX;
+> in
+> rec {
+>   example = lib.reverseList listOfNumbers;
+>   result = reverseList listOfNumbers;
+> }				
+> ```
+> 
+> > [!hint]
+> > - `lib.list.reverseList`
+> >   ```nix
+> >   reverseList [ "b" "o" "j" ]
+> >   => [ "j" "o" "b" ]
+> >   ``` 
+
+> [!done]
+> ```nix
+> with import <nixpkgs> { };
+> let
+>   listOfNumbers = [2 4 6 9 27];
+>   reverseList = l: lib.fold (e: list: list ++ [e]) [] l;
+> in
+> rec {
+>   example = lib.reverseList listOfNumbers;
+>   result = reverseList listOfNumbers;
+> }				
+> ```
+
 </br>
 </br>
 </br>
@@ -1267,6 +1496,66 @@ assert (主張する)
 
 # Fold: Implementing 'map' (31/35)
 
+> [!todo]
+> ```nix
+> with import <nixpkgs> { };
+> let
+>   listOfNumbers = [2 4 6 9 27];
+>   myMap = XXX fold XXX; 
+> in
+> rec {
+>   # your map should create the same result as the standard map function
+>   example = map (x: builtins.div x 2) listOfNumbers; 
+>   result = myMap (x: builtins.div x 2) listOfNumbers;
+> }
+> ```
+
+> [!failure]
+> ```nix
+> with import <nixpkgs> { };
+> let
+>   listOfNumbers = [2 4 6 9 27];
+>   myMap = l: fold (); 
+> in
+> rec {
+>   example = map (x: builtins.div x 2) listOfNumbers; 
+>   result = myMap (x: builtins.div x 2) listOfNumbers;
+> }
+> ```
+
+> [!attention]
+> これはムズすぎる。
+> > [!hint]
+> > 関数とリストを引数に取る
+
+> [!answer]
+> ```nix
+>   ...
+>   listOfNumbers = [2 4 6 9 27];
+>   myMap = op: list: lib.fold (x: y: [(op x)] ++ y) [] list; 
+>   ...
+>   result = myMap (x: builtins.div x 2) listOfNumbers;
+> ```
+> ```nix
+>   ...
+> lib.fold (x: y: [(op x)] ++ y) [] [2, 4, 6, 9, 27]
+> => (x: y: [(op x)] ++ y) 2 (lib.fold (x: y: [(op x)] ++ y) [] [4, 6, 9, 27])
+> => [(op 2)] ++ (lib.fold (x: y: [(op x)] ++ y) [] [4, 6, 9, 27])
+> => [1] ++ (lib.fold (x: y: [(op x)] ++ y) [] [4, 6, 9, 27])
+> => [1] ++ ([(op 4)] ++ (lib.fold (x: y: [(op x)] ++ y) [] [6, 9, 27]))
+> => [1] ++ ([2] ++ (lib.fold (x: y: [(op x)] ++ y) [] [6, 9, 27]))
+> => [1] ++ ([2] ++ ([(op 6)] ++ (lib.fold (x: y: [(op x)] ++ y) [] [9, 27])))
+> => [1] ++ ([2] ++ ([3] ++ (lib.fold (x: y: [(op x)] ++ y) [] [9, 27])))
+> => [1] ++ ([2] ++ ([3] ++ ([(op 9)] ++ (lib.fold (x: y: [(op x)] ++ y) [] [27]))))
+> => [1] ++ ([2] ++ ([3] ++ ([4.5] ++ (lib.fold (x: y: [(op x)] ++ y) [] [27]))))
+> => [1] ++ ([2] ++ ([3] ++ ([4.5] ++ ([(op 27)] ++ []))))
+> => [1] ++ ([2] ++ ([3] ++ ([4.5] ++ [13.5])))
+> => [1] ++ ([2] ++ ([3] ++ [4.5, 13.5]))
+> => [1] ++ ([2] ++ [3, 4.5, 13.5])
+> => [1] ++ [2, 3, 4.5, 13.5]
+> => [1, 2, 3, 4.5, 13.5]
+> ```
+
 </br>
 </br>
 </br>
@@ -1274,6 +1563,54 @@ assert (主張する)
 </br>
 
 # Reimplementations: attrVals (32/35)
+> [!todo]
+> ```nix
+> with import <nixpkgs> { };
+> let
+>   attrSet = {c = 3; a = 1; b = 2; d=4;};
+> 
+>   #tips: use the map function and access the attribute values 
+>   attrVals = XXX;
+> 
+> in
+> rec {
+> 
+>   solution = attrVals ["a" "b" "c"] attrSet; #should be [1 2 3]
+> }
+> ```
+
+> [!info] `attrVals` vs `attrValues`
+> arguments を見ればその違いがわかるかも。
+> - #### `lib.attrsets.attrVals` [](https://nixos.org/manual/nixpkgs/stable/#function-library-lib.attrsets.attrVals)
+> 	Return the specified attributes from a set.
+> 	- ##### Inputs [](https://nixos.org/manual/nixpkgs/stable/#auto-generated-8-1.8.1)
+> 		- `nameList`
+> 			- The list of attributes to fetch from `set`. Each attribute name must exist on the attrbitue set
+> 		- `set`
+> 			- The set to get attribute values from
+> - #### `lib.attrsets.attrValues` [](https://nixos.org/manual/nixpkgs/stable/#function-library-lib.attrsets.attrValues)
+> 	Return the values of all attributes in the given set, sorted by attribute name.
+> 	- ##### Inputs [](https://nixos.org/manual/nixpkgs/stable/#auto-generated-7-1.8.1) 
+> 		- `attribute set`
+> 
+> > [!note]
+> > 片方は返すattributeをlistで指定し、もう片方は全て返す。
+
+> [!done]
+> ```nix
+> with import <nixpkgs> { };
+> let
+>   attrSet = {c = 3; a = 1; b = 2; d=4;};
+> 
+>   #tips: use the map function and access the attribute values 
+>   attrVals = al: s: map (e: s.${e}) al;
+> 
+> in
+> rec {
+> 
+>   solution = attrVals ["a" "b" "c"] attrSet; #should be [1 2 3]
+> }
+> ```
 
 </br>
 </br>
@@ -1282,6 +1619,29 @@ assert (主張する)
 </br>
 
 # Reimplementations: attrValues (33/35)
+> [!todo]
+> ```nix
+> with import <nixpkgs> { };
+> let
+>   attrSet = {c = 3; a = 1; b = 2;};
+> 
+>   attrValues = XXX;
+> in
+> rec {
+>   solution = attrValues attrSet; #should be [1 2 3]
+> }
+> ```
+
+> [!hint]
+> - [`attrNames set`](https://nix.dev/manual/nix/2.22/language/builtins.html?highlight=map#builtins-attrNames)
+> 	- Return the names of the attributes in the set _set_ in an alphabetically sorted list. For instance, `builtins.attrNames { y = 1; x = "foo"; }` evaluates to `[ "x" "y" ]`.
+> - #### `lib.attrsets.attrVals` [](https://nixos.org/manual/nixpkgs/stable/#function-library-lib.attrsets.attrVals)
+> 	Return the specified attributes from a set.
+> 	- ##### Inputs [](https://nixos.org/manual/nixpkgs/stable/#auto-generated-8-1.8.1)
+> 		- `nameList`
+> 			- The list of attributes to fetch from `set`. Each attribute name must exist on the attrbitue set
+> 		- `set`
+> 			- The set to get attribute values from
 
 </br>
 </br>
@@ -1290,6 +1650,29 @@ assert (主張する)
 </br>
 
 # Reimplementations: catAttrs (34/35)
+
+> [!todo]
+> ```nix
+> with import <nixpkgs> { };
+> let
+>   list = [["a"] ["b"] ["c"]];
+>   
+>   attrList = [{a = 1;} {b = 0;} {a = 2;}];
+>   catAttrs = XXX
+> in
+> rec {
+>   example = builtins.concatLists list; #is [ "a" "b" "c" ]
+>   result = catAttrs "a" attrList; #should be [1 2] 
+> }
+> ```
+> > [!attention] クソむずい
+
+> [!hint]
+> 以下の関数を使っていた。
+> - map
+> - if
+> - builtins.concatLists
+
 
 </br>
 </br>

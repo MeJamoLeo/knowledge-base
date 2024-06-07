@@ -1,4 +1,4 @@
-#markdown rkdown #tutorial #document
+#markdown #tutorial #document
 Learn how to apply basic formatting to your notes, using [Markdown](https://daringfireball.net/projects/markdown/). For more advanced formatting syntax, refer to [Advanced formatting syntax](https://help.obsidian.md/Editing+and+formatting/Advanced+formatting+syntax).
 
 ## Paragraphs
